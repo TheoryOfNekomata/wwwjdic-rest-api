@@ -145,8 +145,11 @@
             _files.forEach(function _enumerateFiles(file) {
                 var _inPath = _path.normalize(_inputDir + 'dl/' + file.name);
 
-                _fs.exists(_inPath, function(exists) {
-                    if(!exists) {
+                _fs.stat(_inPath, function _onCheckFileExists(err) {
+                    if(!!err) {
+                        if(err.code !== 'ENOENT') {
+                            throw err;
+                        }
                         console.log('File [' + file.name + '] does not exist.');
                         console.log('Please re-download from: [' + file.origin + ']');
                         console.log();
@@ -161,18 +164,44 @@
                         _dotIndex = _filename.indexOf('.'),
                         _ext = _dotIndex > -1 ? file.name.slice(_dotIndex) : '',
                         _outFilename = _path.basename(file.name, _ext),
-                        _outPath = _path.normalize(_inputDir + 'extract/' + _outFilename),
-                        _inEncoding = file.encoding;
+                        _outDir = _path.normalize(_inputDir + 'extract'),
+                        _outPath = _outDir + '/' + _outFilename,
+                        _inEncoding = file.encoding,
+                        _doExtract = function _doExtract() {
+                            switch(_ext) {
+                                case '.gz':
+                                    _extractGzip(_inputDir, _filename, _inEncoding, _outPath);
+                                    break;
+                                case '.zip':
+                                    var _getFiles = file.files;
+                                    _extractZip(_inputDir, _filename, _getFiles);
+                                    break;
+                            }
+                        };
 
-                    switch(_ext) {
-                        case '.gz':
-                            _extractGzip(_inputDir, _filename, _inEncoding, _outPath);
-                            break;
-                        case '.zip':
-                            var _getFiles = file.files;
-                            _extractZip(_inputDir, _filename, _getFiles);
-                            break;
-                    }
+                    _fs.stat(_outDir, function _onCheckOutputDirExists(err2) {
+                        if(!!err2) {
+                            if(err2.code !== 'ENOENT') {
+                                throw err2;
+                            }
+
+                            try {
+                                _fs.mkdir(_outDir, function _onCreateDir(err3) {
+                                    if (!!err3 && err3.code !== 'EEXIST') {
+                                        throw err3;
+                                    }
+
+                                    _doExtract();
+                                });
+                            } catch(err3) {
+                                _doExtract();
+                                return;
+                            }
+                            return;
+                        }
+
+                        _doExtract();
+                    });
                 });
             });
         };

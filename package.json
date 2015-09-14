@@ -1,10 +1,11 @@
 {
-  "name": "wwwjdic-reader",
+  "name": "wwwjdic-rest-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "extract": "node ./bin/extract"
+    "extract": "node ./bin/extract",
+    "build": "node ./bin/build"
   },
   "dependencies": {
     "body-parser": "~1.13.2",

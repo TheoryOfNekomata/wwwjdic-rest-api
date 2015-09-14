@@ -100,3 +100,4 @@ crashlytics-build.properties
 
 # wwwjdic-reader
 input/
+database/
