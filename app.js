@@ -1,6 +1,6 @@
-/*global module,require,__dirname*/
+/*global module,require*/
 
-(function(module, require, __dirname) {
+(function(module, require) {
     "use strict";
 
     var fs = require('fs');
@@ -11,7 +11,6 @@
     var bodyParser = require('body-parser');
 
     var routes = require('./routes/index');
-    var data = require('./middleware/app/download');
 
     var app = express();
 
@@ -31,8 +30,6 @@
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
     app.use('/', routes);
-
-    data.build();
 
 // catch 404 and forward to error handler
     app.use(function (req, res, next) {
@@ -72,4 +69,4 @@
 
     module.exports = app;
 
-})(module, require, __dirname);
+})(module, require);
