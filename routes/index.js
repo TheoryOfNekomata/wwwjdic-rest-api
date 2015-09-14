@@ -1,54 +1,94 @@
-/*global module,require*/
+/*global module,require,__dirname*/
 
-(function(module, require) {
+(function(module, require, __dirname) {
     "use strict";
 
     var express = require('express');
     var router = express.Router();
+    var _ = require('lodash');
 
-    var srcDir = './../src';
-
-    var reader = require(srcDir + '/io/reader');
-
-
-    var paramTypes = {
-        'string': function(param) {
-            return typeof param === 'string';
-        }
+    var middleware = {
+        '': ['license'],
+        '/': ['about']
     };
 
-    var routes = {
-        '': {
-            params: {},
-            children: {
-                'kanji': {
-                    params: {
-                        'dataset': ''
-                    }
-                }
+    var dir = function(absPath) {
+        return __dirname + '/..' + absPath;
+    };
+
+    var routeDir = dir('/middleware/router/');
+
+    for(var route in middleware) {
+        if(middleware.hasOwnProperty(route)) {
+            if(route.trim().length < 1) {
+                router.use(require(routeDir + middleware[route]));
+            } else {
+                router.use(route, require(routeDir + middleware[route]));
             }
         }
+    }
+
+    //var reader = require(srcDir + '/io/reader');
+
+    //middleware.forEach(function(def) {
+    //    if(typeof def === 'string') {
+    //        router.use(require('./router/' + def));
+    //    }
+    //});
+
+    var jsonResponse = function(req, res, realRes) {
+        res.json(_.extend(req.response, realRes || {}));
     };
 
-    var getRouteMethod = function getRouteMethod() {
+    router.get('/', function(req, res, next) {
+        require(dir('/middleware/download'));
+        jsonResponse(req, res);
+    });
 
-    };
+    router.get('/kanji', function(req, res, next) {
+        jsonResponse(req, res, { kanji: 'yes' });
+    });
 
-    var doRoute = function doRoute(parentRoute, routes) {
-        parentRoute = parentRoute || "";
-
-        if(parentRoute.length > 0) {
-            router.get(parentRoute, getRouteMethod(parentRoute));
-        }
-
-        for(var route in routes) {
-            if(routes.hasOwnProperty(route)) {
-                doRoute(parentRoute + "/" + route, routes[route]);
-            }
-        }
-    };
-
-    doRoute(routes);
+    //
+    //
+    //var paramTypes = {
+    //    'string': function(param) {
+    //        return typeof param === 'string';
+    //    }
+    //};
+    //
+    //var routes = {
+    //    '': {
+    //        params: {},
+    //        children: {
+    //            'kanji': {
+    //                params: {
+    //                    'dataset': ''
+    //                }
+    //            }
+    //        }
+    //    }
+    //};
+    //
+    //var getRouteMethod = function getRouteMethod() {
+    //
+    //};
+    //
+    //var doRoute = function doRoute(parentRoute, routes) {
+    //    parentRoute = parentRoute || "";
+    //
+    //    if(parentRoute.length > 0) {
+    //        router.get(parentRoute, getRouteMethod(parentRoute));
+    //    }
+    //
+    //    for(var route in routes) {
+    //        if(routes.hasOwnProperty(route)) {
+    //            doRoute(parentRoute + "/" + route, routes[route]);
+    //        }
+    //    }
+    //};
+    //
+    //doRoute(routes);
 
     /* GET home page. */
     //router.get('/', function (req, res, next) {
@@ -104,4 +144,4 @@
     //});
 
     module.exports = router;
-})(module, require);
+})(module, require, __dirname);
