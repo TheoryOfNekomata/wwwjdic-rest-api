@@ -2,7 +2,7 @@
 
 /*global module,require,process*/
 
-(function(module, require, process) {
+(function www(module, require, process) {
     "use strict";
 
     /**

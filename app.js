@@ -1,6 +1,6 @@
 /*global module,require*/
 
-(function(module, require) {
+(function app(module, require) {
     "use strict";
 
     var fs = require('fs');
@@ -12,11 +12,11 @@
 
     var routes = require('./routes/index');
 
-    var app = express();
+    var expressApp = express();
 
-    app.set('env', 'development');
+    expressApp.set('env', 'development');
 
-    app.engine('json', function(filePath, options, callback) {
+    expressApp.engine('json', function(filePath, options, callback) {
         fs.readFile(filePath, function (err, content) {
             if (err) {
                 return callback(new Error(err));
@@ -25,14 +25,14 @@
         });
     });
 
-    app.use(logger('dev'));
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: false}));
-    app.use(cookieParser());
-    app.use('/', routes);
+    expressApp.use(logger('dev'));
+    expressApp.use(bodyParser.json());
+    expressApp.use(bodyParser.urlencoded({extended: false}));
+    expressApp.use(cookieParser());
+    expressApp.use('/', routes);
 
 // catch 404 and forward to error handler
-    app.use(function (req, res, next) {
+    expressApp.use(function (req, res, next) {
         var err = new Error('Invalid Request');
         err.status = 400;
         next(err);
@@ -42,8 +42,8 @@
 
 // development error handler
 // will print stacktrace
-    if (app.get('env') === 'development') {
-        app.use(function (err, req, res, next) {
+    if (expressApp.get('env') === 'development') {
+        expressApp.use(function (err, req, res, next) {
             res
                 .status(err.status || 500)
                 .json({
@@ -55,7 +55,7 @@
 
 // production error handler
 // no stacktraces leaked to user
-    app.use(function (err, req, res, next) {
+    expressApp.use(function (err, req, res, next) {
         var status = err.status || 500;
 
         res
@@ -67,6 +67,6 @@
     });
 
 
-    module.exports = app;
+    module.exports = expressApp;
 
 })(module, require);

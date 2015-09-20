@@ -5,12 +5,43 @@
 
     var
         // -- Node dependencies --
+
         _sql = require('sqlite3').verbose(),
         _fs = require('fs'),
 
         // -- Script locals --
 
-        _db = null,
+        _engine = {
+            type: 'firebase',
+            params: {
+                auth: {
+
+                }
+            }
+        },
+
+        _input = [
+            //{ name: '4j324_sj.txt', reader: 'yojijukugo' },
+            { name: 'edict', reader: 'edict' },
+            //{ name: 'edict2', reader: 'edict' },
+            { name: 'enamdict', reader: 'edict' },
+            //{ name: 'EssentialVerbs', reader: 'wakanCsv' },
+            //{ name: 'examples', reader: 'tanakaCorpus' },
+            //{ name: 'JLPT2_vocab', reader: 'wakanCsv' },
+            //{ name: 'JLPT3_vocab', reader: 'wakanCsv' },
+            //{ name: 'JLPT4_vocab', reader: 'wakanCsv' },
+            //{ name: 'kanjd212', reader: 'kanjidic' },
+            //{ name: 'kanjd213u', reader: 'kanjidic' },
+            //{ name: 'kanjidic', reader: 'kanjidic' },
+            //{ name: 'kradfile', reader: 'krad' },
+            //{ name: 'NewJinmeiKanji.csv', reader: 'wakanCsv' },
+            //{ name: 'OldJinmeiKanji.csv', reader: 'wakanCsv' },
+            //{ name: 'OtherVerbs.csv', reader: 'wakanCsv' },
+            //{ name: 'radkfile', reader: 'radk' },
+            //{ name: 'SuruVerbs.csv', reader: 'wakanCsv' }
+        ],
+
+        _reader = require('./build/reader'),
 
         // -- Helper functions --
 
@@ -19,73 +50,27 @@
         },
 
         // -- Script functions --
-        _initDatabase = function() {
-            _db = new _sql.Database(_dir('/database/main.sqlite'));
 
-            _db.serialize(function _initDatabaseElems() {
-                _db.run([
-                    'CREATE TABLE kanji (',
-                    [
-                        'id INTEGER NOT NULL',
-                        'kanji CHARACTER NOT NULL',
-                        'jlptLevel INTEGER',
-                        'jouyouGrade INTEGER',
-                        'strokes INTEGER NOT NULL',
-                        'bushuRadical INTEGER NOT NULL',
-                        'classicalRadical INTEGER',
-                        'frequency INTEGER',
-                        'shiftJis VARCHAR(6)',
-                        'indexDA VARCHAR(15)',
-                        'indexDB VARCHAR(15)',
-                        'indexDC VARCHAR(15)',
-                        'indexDF VARCHAR(15)',
-                        'indexDG VARCHAR(15)',
-                        'indexDH VARCHAR(15)',
-                        'indexDJ VARCHAR(15)',
-                        'indexDK VARCHAR(15)',
-                        'indexDL VARCHAR(15)',
-                        'indexDM VARCHAR(15)',
-                        'indexDN VARCHAR(15)',
-                        'indexDO VARCHAR(15)',
-                        'indexDP VARCHAR(15)',
-                        'indexDR VARCHAR(15)',
-                        'indexDS VARCHAR(15)',
-                        'indexDT VARCHAR(15)',
-                        'indexIN VARCHAR(15)',
-                        'indexMN VARCHAR(15)',
-                        'indexMP VARCHAR(15)',
-                        'PRIMARY KEY (id)'
-                    ].join(', '),
-                    ')'
-                ].join(' '));
-            });
 
-            _db.close();
-        },
 
         // -- Main function --
 
         _build = function _build() {
-            var _databaseDir = _dir('/database');
+            _input.forEach(function _onEnumerateInputFiles(input) {
+                try {
+                    var _inputPath = _dir('/input/extract/' + input.name);
 
-            var _databaseFile = _databaseDir + '/main.sqlite';
-
-            _fs.stat(_databaseFile, function _onCheckDbExists(err) {
-                if (!!err) {
-                    if(err.code !== 'ENOENT') {
-                        throw err;
-                    }
-                    _fs.mkdir(_databaseDir, function _onCreateDir(err2) {
-                        if(!!err2) {
-                            throw err2;
+                    _reader(
+                        _inputPath,
+                        input.reader,
+                        function _onReadInputFile(data) {
+                            console.log(data.entries[0]);
+                            //_data[input.name] = data;
                         }
+                    );
+                } catch(e) {
 
-                        _initDatabase();
-                    });
-                    return;
                 }
-
-                _initDatabase();
             });
         };
 

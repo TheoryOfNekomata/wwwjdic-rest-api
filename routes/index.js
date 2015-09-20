@@ -1,6 +1,6 @@
 /*global module,require,__dirname*/
 
-(function(module, require, __dirname) {
+(function routesIndex(module, require, __dirname) {
     "use strict";
 
     var express = require('express');
