@@ -20,20 +20,51 @@
                 info: {},
                 entries: []
             },
-                _reader = require('./reader/' + reader)(datasetName);
+                _reader = require('./reader/' + reader)(datasetName),
+                _info = [];
 
-            raw = raw.split('\n');
+            if(_reader.isRowBased) {
 
-            while(raw.length > 0) {
-                var _raw = raw.shift().trim();
+                raw = raw.split('\n');
 
-                if(_isEmptyRow(_raw)) { continue; }
-                if(_reader.isCommentRow(_raw)) {
-                    _data.info[datasetName] = _reader.readInfoRow(_raw);
-                    continue;
+                while(raw.length > 0) {
+                    var _raw = raw.shift().trim();
+
+                    if(_isEmptyRow(_raw)) {
+                        continue;
+                    }
+                    if(_reader.isCommentRow(_raw)) {
+                        var _readInfo = _reader.readInfoRow(_raw);
+                        switch(typeof _readInfo) {
+                            case 'string':
+                                _info.push(_readInfo);
+                                continue;
+                        }
+                        _data.info[datasetName] = _readInfo;
+                        continue;
+                    }
+
+                    _data.entries.push(_reader.readDataRow(_raw));
                 }
 
-                _data.entries.push(_reader.readDataRow(_raw));
+
+                if(typeof _info[0] === 'string') {
+                    _data.info[datasetName] = _info.join(' ');
+                }
+
+                return _data;
+            }
+
+            while(raw.length > 0) {
+                var _readData = _reader.read();
+                switch(_readData.type) {
+                    case 'entry':
+                        _data.entries.push(_readData.content);
+                        break;
+                    case 'info':
+                        _data.info[datasetName] = _readData.content;
+                        break;
+                }
             }
 
             return _data;

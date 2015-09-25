@@ -34,7 +34,7 @@
                     _attr = _parsedChunk.attr,
                     _value = _parsedChunk.data;
 
-                if(_attr === 'unicode') {
+                if(_attr === 'unicode' || _attr === 'shiftJis') {
                     // we don't want unicode because we can do that ourselves xDDDD
                     continue;
                 }
@@ -76,7 +76,8 @@
         return {
             isCommentRow: _isCommentRow,
             readInfoRow: _readInfoRow,
-            readDataRow: _readDataRow
+            readDataRow: _readDataRow,
+            isRowBased: true
         };
     };
 

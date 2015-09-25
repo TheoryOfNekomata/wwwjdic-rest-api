@@ -1,6 +1,6 @@
-/*global require,__dirname,console*/
+/*global require,__dirname,console,process*/
 
-(function build(require, __dirname, console) {
+(function build(require, __dirname, console, process) {
     "use strict";
 
     var
@@ -22,9 +22,9 @@
 
         _input = [
             //{ name: '4j324_sj.txt', reader: 'yojijukugo' },
-            { name: 'edict', reader: 'edict' },
+            //{ name: 'edict', reader: 'edict' },
             //{ name: 'edict2', reader: 'edict' },
-            { name: 'enamdict', reader: 'edict' },
+            //{ name: 'enamdict', reader: 'edict' },
             //{ name: 'EssentialVerbs', reader: 'wakanCsv' },
             //{ name: 'examples', reader: 'tanakaCorpus' },
             //{ name: 'JLPT2_vocab', reader: 'wakanCsv' },
@@ -33,7 +33,7 @@
             //{ name: 'kanjd212', reader: 'kanjidic' },
             //{ name: 'kanjd213u', reader: 'kanjidic' },
             //{ name: 'kanjidic', reader: 'kanjidic' },
-            //{ name: 'kradfile', reader: 'krad' },
+            { name: 'kradfile', reader: 'krad' },
             //{ name: 'NewJinmeiKanji.csv', reader: 'wakanCsv' },
             //{ name: 'OldJinmeiKanji.csv', reader: 'wakanCsv' },
             //{ name: 'OtherVerbs.csv', reader: 'wakanCsv' },
@@ -58,22 +58,28 @@
         _build = function _build() {
             _input.forEach(function _onEnumerateInputFiles(input) {
                 try {
-                    var _inputPath = _dir('/input/extract/' + input.name);
+                    var _inputPath = _dir('/input/extract/' + input.name),
+                        _data = {};
 
                     _reader(
                         _inputPath,
                         input.reader,
                         function _onReadInputFile(data) {
-                            console.log(data.entries[0]);
-                            //_data[input.name] = data;
+                            _data[input.name] = data;
+
+                            console.log(data.entries);
                         }
                     );
                 } catch(e) {
 
                 }
             });
+
+            // TODO: npm run build [ { json | sqlite | text } ]
+
+            //console.log(process.argv.slice(2));
         };
 
     _build();
 
-})(require, __dirname, console);
+})(require, __dirname, console, process);

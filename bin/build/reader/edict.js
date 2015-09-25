@@ -1,13 +1,9 @@
-/*global module,require,__dirname*/
+/*global module,require*/
 
-(function readerEdict(module, require, __dirname) {
+(function readerEdict(module, require) {
     "use strict";
 
     var
-        // -- Node dependencies --
-
-        _ = require('lodash'),
-
         // -- Script locals --
 
         _datasetName,
@@ -20,8 +16,9 @@
 
         _startParsing = function _startParsing(parser) {
             var _rowData = parser.parse();
-            //_rowData.dataset = _datasetName;
-            //return _rowData;
+            _rowData.dataset = _datasetName;
+            console.log(_rowData);
+            return _rowData;
         },
 
         _readDataRow = function _readDataRow(chunks) {
@@ -46,8 +43,9 @@
         return {
             isCommentRow: _isCommentRow,
             readInfoRow: _readInfoRow,
-            readDataRow: _readDataRow
+            readDataRow: _readDataRow,
+            isRowBased: true
         };
     };
 
-})(module, require, __dirname);
+})(module, require);
