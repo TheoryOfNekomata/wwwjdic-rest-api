@@ -45,6 +45,7 @@ Run commands with `$ npm run <command>`, where `<command>` is any of the followi
     - [ ] SQLite
     - [ ] SQL script (maximum compatibility among SQL variants)
     - [ ] CSV/Plain Text
+- [ ] REST API
 
 ## Endpoints
 
