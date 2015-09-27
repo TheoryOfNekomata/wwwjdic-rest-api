@@ -39,9 +39,9 @@ Run commands with `$ npm run <command>`, where `<command>` is any of the followi
     - [X] **Yojijukugo** (see [this page](http://home.earthlink.net/~4jword/index3.htm))
     - [ ] CSV (for [WaKan](http://wakan.manga.cz) files)
     - [ ] Tanaka Corpus
-- [X] Downloaders
-- [X] Builders *(needs to be faster)*
-    - [X] JSON
+- [X] **Downloaders**
+- [ ] **Builders** *(needs to be faster)*
+    - [X] **JSON**
     - [ ] SQLite
     - [ ] SQL script (maximum compatibility among SQL variants)
     - [ ] **XML**
