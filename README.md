@@ -13,6 +13,10 @@ order to deliver data asynchronously to its clients.
 
 See `package.json` for versions of Node dependencies.
 
+## Installation
+
+Just run `npm install`.
+
 ## Directories
 
 `wwwjdic-reader` is based on the default directory structure of `express-generator`.
