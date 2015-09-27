@@ -50,8 +50,9 @@ Run commands with `$ npm run <command>`, where `<command>` is any of the followi
 - [ ] REST API
 
 Legend:
+- [ ] Not Done
 - [ ] **In Progress**
-- [X] Done
+- [X] **Done**
 
 ## Endpoints
 
