@@ -6,6 +6,8 @@
     var _chunks,
 
         _isValidTag = function(tagish) {
+            // ftp://ftp.edrdg.org/pub/Nihongo/edict_doc.html
+
             var _validTags = [
                 'adj-i',
                 'adj-na',
@@ -107,7 +109,16 @@
                 'sl',
                 'uK',
                 'uk',
-                'vulg'
+                'vulg',
+                'kyb:',
+                'osb:',
+                'ksb:',
+                'ktb:',
+                'tsb:',
+                'thb:',
+                'tsug:',
+                'kyu:',
+                'rkb:'
             ];
 
             return _validTags.indexOf(tagish) !== -1;

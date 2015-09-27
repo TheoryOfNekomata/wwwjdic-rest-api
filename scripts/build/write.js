@@ -12,6 +12,7 @@
         _basename,
         _options,
         _compStreams,
+        _progress = require('progress-stream'),
 
         _writeHeader = function _writeHeader() {
             _compStreams.header.write(_formatter.getHeader());
@@ -30,6 +31,12 @@
                 dataFooter: new Stream(),
                 footer: new Stream()
             };
+
+            Object.keys(_compStreams).forEach(function(key) {
+                _compStreams[key].on('write', function(err, data) {
+                    console.log(data);
+                });
+            });
         },
 
         _writeDataHeader = function _writeDataHeader() {
@@ -41,10 +48,17 @@
         },
 
         _doWrite = function() {
-            _stream = _fs.createWriteStream(_getPath(_basename), { encoding: _options.destEncoding }, function(err) {
+            _stream = _fs.createWriteStream(_getPath(_basename), { encoding: _options.destEncoding }, function(err, data) {
                 if(!!err) {
                     throw err;
                 }
+
+                console.log('asfdasdfasdf');
+                console.log(data);
+            });
+
+            _stream.on('data', function(err, data) {
+                console.log(data);
             });
 
             _merge2(
