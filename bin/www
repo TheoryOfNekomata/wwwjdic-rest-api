@@ -1,0 +1,95 @@
+#!/usr/bin/env node
+/*global require,process,console*/
+
+(function www(require, process, console) {
+    "use strict";
+
+    /**
+     * Module dependencies.
+     */
+
+    var _app = require('../app'),
+        _debug = require('debug')('wwwjdic-rest-api:server'),
+        _http = require('http'),
+
+        /**
+         * Normalize a port into a number, string, or false.
+         */
+
+        _normalizePort = function _normalizePort(val) {
+            var port = parseInt(val, 10);
+
+            if (isNaN(port)) {
+                // named pipe
+                return val;
+            }
+
+            if (port >= 0) {
+                // port number
+                return port;
+            }
+
+            return false;
+        },
+
+        /**
+         * Event listener for HTTP server "error" event.
+         */
+
+        _onError = function _onError(error) {
+            if (error.syscall !== 'listen') {
+                throw error;
+            }
+
+            var bind = typeof _port === 'string' ?
+            'Pipe ' + _port : 'Port ' + _port;
+
+            // handle specific listen errors with friendly messages
+            switch (error.code) {
+                case 'EACCES':
+                    console.error(bind + ' requires elevated privileges');
+                    process.exit(1);
+                    break;
+                case 'EADDRINUSE':
+                    console.error(bind + ' is already in use');
+                    process.exit(1);
+                    break;
+                default:
+                    throw error;
+            }
+        },
+
+        /**
+         * Event listener for HTTP server "listening" event.
+         */
+
+        _onListening = function _onListening() {
+            var addr = _server.address();
+            var bind = typeof addr === 'string' ?
+            'pipe ' + addr : 'port ' + addr.port;
+            _debug('Listening on ' + bind);
+        },
+
+        /**
+         * Get port from environment and store in Express.
+         */
+
+        _port = _normalizePort(process.env.PORT || '1337');
+
+    _app.set('port', _port);
+
+    /**
+     * Create HTTP server.
+     */
+
+    var _server = _http.createServer(_app);
+
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+
+    _server.listen(_port);
+    _server.on('error', _onError);
+    _server.on('listening', _onListening);
+
+})(require, process, console);
