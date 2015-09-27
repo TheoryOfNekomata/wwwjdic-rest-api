@@ -16,6 +16,7 @@
                     'db-sqlite',
                     'db-nosql',
                     'sql',
+                    'csv',
                     'xml'
                 ],
                 _options = configData;

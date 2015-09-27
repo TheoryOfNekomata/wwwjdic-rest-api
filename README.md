@@ -1,6 +1,11 @@
 # wwwjdic-rest-api
 A REST API to complement with Jim Breen's KANJIDIC data (and others).
 
+## Why I Did This
+I'm trying to build apps and services that make use of KANJIDIC/EDICT data. Instead of bundling it to the apps, I'd
+rather make a centralized data repository--a server that has the ability to retrieve WWWJDIC data, and process it in
+order to deliver data asynchronously to its clients.
+
 ## Platforms
 - [NodeJS](https://nodejs.org) (using `v.0.12.7` on development)
 - [Express](http://expressjs.com) `v.4.13.1`
@@ -24,11 +29,10 @@ See `package.json` for versions of Node dependencies.
 
 Run commands with `$ npm run <command>`, where `<command>` is any of the following:
 
-| `<command>` | Description                                                                                                                                                    |
-|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `update`    | Downloads input files from their respective sources.                                                                                                           |
-| `extract`   | Extracts data from input files (retrieved from `update`).                                                                                                      |
-| `build`     | Builds data from `extract` to formats accepted by databases. Accepts an extra argument which is any of the following: `database`, `json`, `sqlite`, or `text`. |
+| `<command>` | Description                                                                                                                                                                                                                         |
+|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `update`    | Prepares retrieved data (as well as to retrieve them in case they don't exist yet with the `-D` parameter).                                                                                                                         |
+| `build`     | Builds data from `update` to common data formats. Accepts an extra argument which is any of the following: `db-sqlite`, `db-nosql`, `json`, `sql`, `csv`, or `xml`. If this parameter is omitted or invalid, it defaults to `json`. |
 
 ## Tasks
 
@@ -66,4 +70,4 @@ TODO
 
 ## License
 
-MIT. `wwwjdic-reader` is licensed as to become compatible with WWWJDIC's dictionary files (CC-BY-SA v3).
+MIT. `wwwjdic-rest-api` is licensed as to become compatible with WWWJDIC's dictionary files (CC-BY-SA v3).
