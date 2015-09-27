@@ -18,6 +18,10 @@
                     'sql',
                     'csv',
                     'xml'
+
+                    // TODO add options for 'ext-firebase', 'ext-mysql'
+                    // npm run build ext-firebase <url> <creds...>
+                    // npm run build ext-mysql <url> <creds...>
                 ],
                 _options = configData;
 
