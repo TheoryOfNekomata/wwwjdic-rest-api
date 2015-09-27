@@ -30,6 +30,17 @@ Just run `npm install`.
 | `routes`       | Express routes.                                       |
 | `scripts`      | The project's scripts.                                |
 
+## Adding Sources and Configuration
+
+The project's configuration resides in `config.json`, located in the project root.
+
+`sources` list the definitions of sources, such as the origin URL, the dataset name, and the encoding. Different file
+types take different formats.
+
+`datasets` enumerate the list of datasets which are produced by preparing the retrieved sources.
+
+`destEncoding` specifies the encoding used among datasets. Defaults to `UTF-8`.
+
 ## Shell Commands
 
 Run commands with `$ npm run <command>`, where `<command>` is any of the following:
