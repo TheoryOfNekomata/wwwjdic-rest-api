@@ -103,4 +103,4 @@ crashlytics-build.properties
 input/
 output/
 config.json
-.config.json
+config.*.json
