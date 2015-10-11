@@ -75,7 +75,7 @@
         },
 
         _doWriteFile = function(sourceDef, pipe) {
-            var _filename = './input/' + _getFileDefName(sourceDef);
+            var _filename = path.normalize(_configData.directories.input + '/' + _getFileDefName(sourceDef));
 
             if(!!sourceDef.encoding) {
                 pipe = pipe
@@ -85,6 +85,34 @@
 
             pipe
                 .pipe(fs.createWriteStream(_filename));
+        },
+
+        _onMakeDir = function _onMakeDir(err, sourceDef, pipe) {
+            if(!!err) {
+                throw err;
+            }
+
+            _doWriteFile(sourceDef, pipe);
+        },
+
+        _onCheckDir = function _onCheckDir(err, sourceDef, pipe) {
+            if(!!err) {
+                switch(err.code) {
+                    case 'ENOENT':
+                        fs.mkdir(_configData.directories.input, function(err2, res2) {
+                            _onMakeDir(err2, sourceDef, pipe);
+                        });
+                        return;
+                }
+            }
+
+            _onMakeDir(err, sourceDef, pipe);
+        },
+
+        _writeFile = function(sourceDef, pipe) {
+            fs.stat(_configData.directories.input, function(err, res) {
+                _onCheckDir(err, sourceDef, pipe);
+            });
         },
 
         _onIterateInputFiles = function _onIterateInputFiles(sourceDef, index) {
@@ -111,13 +139,14 @@
                 progress: _onProgress
             }, null, function(err, res) {
                 if(!!err) {
+                    console.log(err);
                     switch(err.code) {
                         case 'EAI_AGAIN': break;
                         default: _cb(err);
                     }
                 }
 
-                _doWriteFile(sourceDef, res.stream);
+                _writeFile(sourceDef, res.stream);
             });
         },
 

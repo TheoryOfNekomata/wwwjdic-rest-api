@@ -5,14 +5,22 @@
     "use strict";
 
     var cli = module.require('commander'),
+        JSONStream = module.require('JSONStream'),
+        fs = module.require('fs'),
+        _readPackageStream = JSONStream.parse('version'),
         args = process.argv;
 
-    args[1] = __filename;
+    _readPackageStream.on('data', function(version) {
+        args[1] = __filename;
 
-    cli
-        .version('0.0.0')
-        .command('update', 'update and prepare datasets')
-        .command('build [format]', 'build datasets to data formats')
-        .parse(args);
+        cli
+            .version(version)
+            .command('update', 'update and prepare datasets')
+            .command('build [format]', 'build datasets to data formats')
+            .parse(args);
+    });
+
+    fs.createReadStream('./package.json')
+        .pipe(_readPackageStream);
 
 })(module, process, __filename);
