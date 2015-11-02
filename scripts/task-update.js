@@ -4,14 +4,22 @@
 (function taskUpdate(module, process) {
     "use strict";
 
+    // Load dependencies
+
     var cli = module.require('commander'),
+
         JSONStream = module.require('JSONStream'),
+
         fs = module.require('fs'),
 
+    // Read package.json and config.json
+
         _readPackageStream = JSONStream.parse('version'),
+
         _readConfigStream = JSONStream.parse('config');
 
     _readPackageStream.on('data', function(version) {
+
         cli
             .version(version)
             .option('-D, --download', 'download all the datasets')
@@ -23,6 +31,7 @@
         _readConfigStream.on('data', function(config) {
             module.require('./task-update/update')(cli, config);
         });
+
     });
 
     fs.createReadStream('./package.json')

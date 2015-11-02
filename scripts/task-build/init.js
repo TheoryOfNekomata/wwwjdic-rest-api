@@ -21,7 +21,6 @@
         _parseCount,
         _currGroup,
         _additional = {},
-        _writeStream,
 
         _sortDatasets = function() {
             _configData.datasets.forEach(function _onIterateDatasets(dataset) {

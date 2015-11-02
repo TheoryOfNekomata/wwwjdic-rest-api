@@ -5,14 +5,14 @@
     "use strict";
 
     var _getReader = function(dataset) {
-        switch(dataset.parser) {
+        switch(dataset.reader) {
             case 'edict':
             case 'krad':
             case 'kanjidic':
             case 'tanakacorpus':
                 return 'row';
         }
-        return null;
+        return 'row'; // default
     };
 
     module.exports = function _read(dataset, cli, configData, cb) {

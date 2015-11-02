@@ -8,6 +8,7 @@
         switch(format) {
             case 'json':
             case 'xml':
+            case 'csv':
                 return 'structured';
         }
 
